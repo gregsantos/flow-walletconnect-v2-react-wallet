@@ -3,9 +3,10 @@ import ProposalSelectSection from '@/components/ProposalSelectSection'
 import RequestModalContainer from '@/components/RequestModalContainer'
 import SessionProposalChainCard from '@/components/SessionProposalChainCard'
 import ModalStore from '@/store/ModalStore'
+import { flowAddresses } from '@/utils/FlowWalletUtil'
 import { cosmosAddresses } from '@/utils/CosmosWalletUtil'
 import { eip155Addresses } from '@/utils/EIP155WalletUtil'
-import { isCosmosChain, isEIP155Chain, isSolanaChain } from '@/utils/HelperUtil'
+import { isFlowChain, isCosmosChain, isEIP155Chain, isSolanaChain } from '@/utils/HelperUtil'
 import { solanaAddresses } from '@/utils/SolanaWalletUtil'
 import { signClient } from '@/utils/WalletConnectUtil'
 import { Button, Divider, Modal, Text } from '@nextui-org/react'
@@ -85,7 +86,16 @@ export default function SessionProposalModal() {
 
   // Render account selection checkboxes based on chain
   function renderAccountSelection(chain: string) {
-    if (isEIP155Chain(chain)) {
+    if (isFlowChain(chain)) {
+      return (
+        <ProposalSelectSection
+          addresses={flowAddresses}
+          selectedAddresses={selectedAccounts[chain]}
+          onSelect={onSelectAccount}
+          chain={chain}
+        />
+      )
+    } else if (isEIP155Chain(chain)) {
       return (
         <ProposalSelectSection
           addresses={eip155Addresses}

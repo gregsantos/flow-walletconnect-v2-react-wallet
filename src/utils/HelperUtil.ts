@@ -74,6 +74,13 @@ export function getWalletAddressFromParams(addresses: string[], params: any) {
 }
 
 /**
+ * Check if chain is part of FLOW standard
+ */
+export function isFlowChain(chain: string) {
+  return chain.includes('flow')
+}
+
+/**
  * Check if chain is part of EIP155 standard
  */
 export function isEIP155Chain(chain: string) {

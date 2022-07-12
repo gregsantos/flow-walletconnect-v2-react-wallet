@@ -1,3 +1,4 @@
+import { FLOW_SIGNING_METHODS } from '@/data/FlowData'
 import { COSMOS_SIGNING_METHODS } from '@/data/COSMOSData'
 import { EIP155_SIGNING_METHODS } from '@/data/EIP155Data'
 import { SOLANA_SIGNING_METHODS } from '@/data/SolanaData'
@@ -5,6 +6,7 @@ import ModalStore from '@/store/ModalStore'
 import { signClient } from '@/utils/WalletConnectUtil'
 import { SignClientTypes } from '@walletconnect/types'
 import { useCallback, useEffect } from 'react'
+import { approveFlowRequest } from '@/utils/FlowRequestHandlerUtil'
 
 export default function useWalletConnectEventsManager(initialized: boolean) {
   /******************************************************************************
@@ -18,6 +20,11 @@ export default function useWalletConnectEventsManager(initialized: boolean) {
   )
 
   /******************************************************************************
+   * 2. [Optional] handle session created
+   *****************************************************************************/
+  const onSessionCreated = useCallback((created: 'session_update') => {}, [])
+
+  /******************************************************************************
    * 3. Open request handling modal based on method that was used
    *****************************************************************************/
   const onSessionRequest = useCallback(
@@ -28,6 +35,23 @@ export default function useWalletConnectEventsManager(initialized: boolean) {
       const requestSession = signClient.session.get(topic)
 
       switch (request.method) {
+        case FLOW_SIGNING_METHODS.FLOW_AUTHN:
+          if (requestEvent) {
+            const response = await approveFlowRequest(requestEvent)
+            await signClient.respond({
+              topic: requestEvent.topic,
+              response
+            })
+          }
+          break
+
+        case FLOW_SIGNING_METHODS.FLOW_AUTHZ:
+        case FLOW_SIGNING_METHODS.FLOW_USER_SIGN:
+          return ModalStore.open('SessionSignFlowModal', {
+            requestEvent,
+            requestSession
+          })
+          
         case EIP155_SIGNING_METHODS.ETH_SIGN:
         case EIP155_SIGNING_METHODS.PERSONAL_SIGN:
           return ModalStore.open('SessionSignModal', { requestEvent, requestSession })

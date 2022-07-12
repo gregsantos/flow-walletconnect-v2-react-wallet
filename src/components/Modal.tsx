@@ -1,4 +1,5 @@
 import ModalStore from '@/store/ModalStore'
+import SessionSignFlowModal from '@/views/SessionSignFlowModal'
 import SessionProposalModal from '@/views/SessionProposalModal'
 import SessionSendTransactionModal from '@/views/SessionSendTransactionModal'
 import SessionSignCosmosModal from '@/views/SessionSignCosmosModal'
@@ -21,6 +22,7 @@ export default function Modal() {
       {view === 'SessionUnsuportedMethodModal' && <SessionUnsuportedMethodModal />}
       {view === 'SessionSignCosmosModal' && <SessionSignCosmosModal />}
       {view === 'SessionSignSolanaModal' && <SessionSignSolanaModal />}
+      {view === 'SessionSignFlowModal' && <SessionSignFlowModal />}
     </NextModal>
   )
 }

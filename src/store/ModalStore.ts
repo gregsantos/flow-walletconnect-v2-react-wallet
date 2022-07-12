@@ -20,6 +20,7 @@ interface State {
     | 'SessionUnsuportedMethodModal'
     | 'SessionSignCosmosModal'
     | 'SessionSignSolanaModal'
+    | 'SessionSignFlowModal'
   data?: ModalData
 }
 
