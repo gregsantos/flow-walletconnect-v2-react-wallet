@@ -11,7 +11,7 @@ import { solanaAddresses } from '@/utils/SolanaWalletUtil'
 import { signClient } from '@/utils/WalletConnectUtil'
 import { Button, Divider, Modal, Text } from '@nextui-org/react'
 import { SessionTypes } from '@walletconnect/types'
-import { ERROR } from '@walletconnect/utils'
+import { getSdkError } from '@walletconnect/utils'
 import { Fragment, useState } from 'react'
 
 export default function SessionProposalModal() {
@@ -78,7 +78,7 @@ export default function SessionProposalModal() {
     if (proposal) {
       await signClient.reject({
         id,
-        reason: ERROR.JSONRPC_REQUEST_METHOD_REJECTED.format()
+        reason: getSdkError('USER_REJECTED')
       })
     }
     ModalStore.close()

@@ -41,6 +41,10 @@ export default class FlowLib {
     return this.wallet.address
   }
 
+  public getPrivateKey() {
+    return this.wallet.keys[0].toString()
+  }
+
   public async authn(message: string) {
     const signature = ''
     const bs58Signature = ''

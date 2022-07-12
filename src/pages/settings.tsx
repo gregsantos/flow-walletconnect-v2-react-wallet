@@ -1,5 +1,6 @@
 import PageHeader from '@/components/PageHeader'
 import SettingsStore from '@/store/SettingsStore'
+import { flowWallets } from '@/utils/FlowWalletUtil'
 import { cosmosWallets } from '@/utils/CosmosWalletUtil'
 import { eip155Wallets } from '@/utils/EIP155WalletUtil'
 import { solanaWallets } from '@/utils/SolanaWalletUtil'
@@ -9,7 +10,9 @@ import { useSnapshot } from 'valtio'
 import packageJSON from '../../package.json'
 
 export default function SettingsPage() {
-  const { testNets, eip155Address, cosmosAddress, solanaAddress } = useSnapshot(SettingsStore.state)
+  const { testNets, flowAddress, eip155Address, cosmosAddress, solanaAddress } = useSnapshot(
+    SettingsStore.state
+  )
 
   return (
     <Fragment>
@@ -47,6 +50,13 @@ export default function SettingsPage() {
         Warning: mnemonics and secret keys are provided for development purposes only and should not
         be used elsewhere!
       </Text>
+
+      <Text h4 css={{ marginTop: '$5', marginBottom: '$5' }}>
+        Flow Private Key
+      </Text>
+      <Card bordered borderWeight="light" css={{ minHeight: '100px' }}>
+        <Text css={{ fontFamily: '$mono' }}>{flowWallets[flowAddress].getPrivateKey()}</Text>
+      </Card>
 
       <Text h4 css={{ marginTop: '$5', marginBottom: '$5' }}>
         EIP155 Mnemonic
