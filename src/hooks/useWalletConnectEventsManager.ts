@@ -29,7 +29,6 @@ export default function useWalletConnectEventsManager(initialized: boolean) {
    *****************************************************************************/
   const onSessionRequest = useCallback(
     async (requestEvent: SignClientTypes.EventArguments['session_request']) => {
-      console.log('session_request', requestEvent)
       const { topic, params } = requestEvent
       const { request } = params
       const requestSession = signClient.session.get(topic)
@@ -51,7 +50,7 @@ export default function useWalletConnectEventsManager(initialized: boolean) {
             requestEvent,
             requestSession
           })
-          
+
         case EIP155_SIGNING_METHODS.ETH_SIGN:
         case EIP155_SIGNING_METHODS.PERSONAL_SIGN:
           return ModalStore.open('SessionSignModal', { requestEvent, requestSession })

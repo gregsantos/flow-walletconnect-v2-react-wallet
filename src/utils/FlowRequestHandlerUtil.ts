@@ -4,6 +4,8 @@ import { getWalletAddressFromParams } from '@/utils/HelperUtil'
 import { formatJsonRpcError, formatJsonRpcResult } from '@json-rpc-tools/utils'
 import { SignClientTypes } from '@walletconnect/types'
 import { getSdkError } from '@walletconnect/utils'
+import { WalletUtils } from '@onflow/fcl'
+import { sign } from '@/utils/crypto'
 
 const getServices = (address: string) => [
   {
@@ -42,9 +44,13 @@ export async function approveFlowRequest(
 ) {
   const { params, id } = requestEvent
   const { request } = params
-  const wallet = flowWallets[getWalletAddressFromParams(flowAddresses, params)]
-  const privKey = 'f8e188e8af0b8b414be59c4a1a15cc666c898fb34d94156e9b51e18bfde754a5'
-  const services = getServices('0xf8d6e0586b0a20c7')
+  const {
+    method,
+    params: { addr, keyId, message }
+  } = request
+  // const wallet = flowWallets[getWalletAddressFromParams(flowAddresses, params)]
+  const privKey = '268d99bb71f7402427cf0e3faafc0f078043708d8a47ddeb59296794f78b617e'
+  const services = getServices(addr)
 
   switch (request.method) {
     case FLOW_SIGNING_METHODS.FLOW_AUTHN:
@@ -56,16 +62,15 @@ export async function approveFlowRequest(
         data: {
           f_type: 'AuthnResponse',
           f_vsn: '1.0.0',
-          addr: '0xf8d6e0586b0a20c7',
+          addr,
           services
         }
       })
 
-    /*  case FLOW_SIGNING_METHODS.FLOW_AUTHZ:
-      const message = params[0].message
+    case FLOW_SIGNING_METHODS.FLOW_AUTHZ:
       const signature = sign(privKey, message)
 
-      const compSig = new WalletUtils.CompositeSignature('f8d6e0586b0a20c7', 0, signature)
+      const compSig = new WalletUtils.CompositeSignature(addr, keyId, signature)
       return formatJsonRpcResult(id, {
         f_type: 'PollingResponse',
         f_vsn: '1.0.0',
@@ -74,7 +79,7 @@ export async function approveFlowRequest(
         reason: null,
         data: compSig
       })
-
+    /*
     case FLOW_SIGNING_METHODS.FLOW_USER_SIGN:
       const userSign = await wallet.userSign(params.signerAddress)
       return formatJsonRpcResult(id, userSign.signature)  
