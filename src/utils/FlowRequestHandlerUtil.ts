@@ -4,7 +4,7 @@ import { getWalletAddressFromParams } from '@/utils/HelperUtil'
 import { formatJsonRpcError, formatJsonRpcResult } from '@json-rpc-tools/utils'
 import { SignClientTypes } from '@walletconnect/types'
 import { getSdkError } from '@walletconnect/utils'
-import { WalletUtils } from '@onflow/fcl'
+import { WalletUtils, withPrefix } from '@onflow/fcl'
 import { sign } from '@/utils/crypto'
 
 const getServices = (address: string) => [
@@ -43,14 +43,10 @@ export async function approveFlowRequest(
   requestEvent: SignClientTypes.EventArguments['session_request']
 ) {
   const { params, id } = requestEvent
-  const { request } = params
-  const {
-    method,
-    params: { addr, keyId, message }
-  } = request
-  // const wallet = flowWallets[getWalletAddressFromParams(flowAddresses, params)]
-  const privKey = '268d99bb71f7402427cf0e3faafc0f078043708d8a47ddeb59296794f78b617e'
-  const services = getServices(addr)
+  const { chainId, request } = params
+
+  const { addr, keyId, message } = request.params[0]
+  const services = getServices(withPrefix(addr))
 
   switch (request.method) {
     case FLOW_SIGNING_METHODS.FLOW_AUTHN:
@@ -62,12 +58,14 @@ export async function approveFlowRequest(
         data: {
           f_type: 'AuthnResponse',
           f_vsn: '1.0.0',
-          addr,
+          addr: withPrefix(addr),
           services
         }
       })
 
     case FLOW_SIGNING_METHODS.FLOW_AUTHZ:
+      const wallet = flowWallets[withPrefix(addr)] //flowWallets[getWalletAddressFromParams(flowAddresses, params)]
+      const privKey = wallet.getPrivateKey(keyId)
       const signature = sign(privKey, message)
 
       const compSig = new WalletUtils.CompositeSignature(addr, keyId, signature)
@@ -86,7 +84,7 @@ export async function approveFlowRequest(
 */
 
     default:
-      throw new Error(getSdkError('UNSUPPORTED_METHODS').message)
+      throw new Error(getSdkError('INVALID_METHOD').message)
   }
 }
 

@@ -9,7 +9,7 @@ import { Button, Divider, Modal, Text } from '@nextui-org/react'
 import { Fragment } from 'react'
 import { approveFlowRequest, rejectFlowRequest } from '@/utils/FlowRequestHandlerUtil'
 
-export default function SessionSignCosmosModal() {
+export default function SessionSignFlowModal() {
   // Get request and wallet data from store
   const requestEvent = ModalStore.state.data?.requestEvent
   const requestSession = ModalStore.state.data?.requestSession
