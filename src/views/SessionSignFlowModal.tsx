@@ -23,6 +23,23 @@ export default function SessionSignFlowModal() {
   const { topic, params } = requestEvent
   const { chainId, request } = params
 
+  type ReduceReturnType = {
+    addr?: string
+    keyId?: number
+    cadence?: string
+    args?: any
+  }
+  const JSONparams = JSON.parse(request.params[0])
+
+  const allowed = ['addr', 'keyId', 'cadence', 'args', 'message']
+  const filtered = Object.keys(JSONparams)
+    .filter(key => allowed.includes(key))
+    .reduce((obj, key) => {
+      obj[key] = JSONparams[key]
+      return obj
+    }, {})
+  const JSONcadence = request.params[0].cadence
+
   // Handle approve action (logic varies based on request method)
   async function onApprove() {
     if (requestEvent) {
@@ -58,7 +75,13 @@ export default function SessionSignFlowModal() {
 
         <Divider y={2} />
 
-        <RequestDataCard data={params} />
+        <RequestDataCard
+          data={{
+            chainId,
+            method: request.method,
+            ...filtered
+          }}
+        />
 
         <Divider y={2} />
 
