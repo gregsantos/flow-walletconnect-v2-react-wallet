@@ -63,7 +63,8 @@ export async function approveFlowRequest(
   const { addr, keyId, message, data } = paramsAsJSON
   const services = getServices(withPrefix(addr))
   const wallet = flowWallets[withPrefix(addr)] //flowWallets[getWalletAddressFromParams(flowAddresses, params)]
-  const privKey = wallet.getPrivateKey(keyId) || wallet.getPrivateKey(data.keyId)
+  const keyIndex = keyId || data?.keyId || 0
+  const privKey = wallet.getPrivateKey(keyIndex)
 
   switch (request.method) {
     case FLOW_SIGNING_METHODS.FLOW_AUTHN:
