@@ -15,7 +15,6 @@ interface State {
   view?:
     | 'SessionProposalModal'
     | 'SessionSignModal'
-    | 'SessionSignTypedDataModal'
     | 'SessionSendTransactionModal'
     | 'SessionUnsuportedMethodModal'
     | 'SessionSignCosmosModal'
