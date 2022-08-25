@@ -1,6 +1,5 @@
-import { COSMOS_MAINNET_CHAINS, TCosmosChain } from '@/data/COSMOSData'
-import { EIP155_CHAINS, TEIP155Chain } from '@/data/EIP155Data'
-import { SOLANA_CHAINS, TSolanaChain } from '@/data/SolanaData'
+import { FLOW_CHAINS, TFlowChain } from '@/data/FlowData'
+
 import { Col, Divider, Row, Text } from '@nextui-org/react'
 import { Fragment } from 'react'
 
@@ -22,15 +21,7 @@ export default function RequesDetailsCard({ chains, protocol }: IProps) {
         <Col>
           <Text h5>Blockchain(s)</Text>
           <Text color="$gray400">
-            {chains
-              .map(
-                chain =>
-                  EIP155_CHAINS[chain as TEIP155Chain]?.name ??
-                  COSMOS_MAINNET_CHAINS[chain as TCosmosChain]?.name ??
-                  SOLANA_CHAINS[chain as TSolanaChain]?.name ??
-                  chain
-              )
-              .join(', ')}
+            {chains.map(chain => FLOW_CHAINS[chain as TFlowChain]?.name ?? chain).join(', ')}
           </Text>
         </Col>
       </Row>

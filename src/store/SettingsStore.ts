@@ -7,9 +7,6 @@ interface State {
   testNets: boolean
   account: number
   flowAddress: string
-  eip155Address: string
-  cosmosAddress: string
-  solanaAddress: string
 }
 
 /**
@@ -18,10 +15,7 @@ interface State {
 const state = proxy<State>({
   testNets: typeof localStorage !== 'undefined' ? Boolean(localStorage.getItem('TEST_NETS')) : true,
   account: 0,
-  flowAddress: '',
-  eip155Address: '',
-  cosmosAddress: '',
-  solanaAddress: ''
+  flowAddress: ''
 })
 
 /**
@@ -36,18 +30,6 @@ const SettingsStore = {
 
   setFlowAddress(flowAddress: string) {
     state.flowAddress = flowAddress
-  },
-
-  setEIP155Address(eip155Address: string) {
-    state.eip155Address = eip155Address
-  },
-
-  setCosmosAddress(cosmosAddresses: string) {
-    state.cosmosAddress = cosmosAddresses
-  },
-
-  setSolanaAddress(solanaAddress: string) {
-    state.solanaAddress = solanaAddress
   },
 
   toggleTestNets() {

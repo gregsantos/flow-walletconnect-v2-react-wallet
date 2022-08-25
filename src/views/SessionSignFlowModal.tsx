@@ -35,6 +35,7 @@ export default function SessionSignFlowModal() {
   const filtered = Object.keys(JSONparams)
     .filter(key => allowed.includes(key))
     .reduce((obj, key) => {
+      // @ts-ignore
       obj[key] = JSONparams[key]
       return obj
     }, {})

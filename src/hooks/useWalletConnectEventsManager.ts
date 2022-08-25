@@ -1,7 +1,4 @@
 import { FLOW_SIGNING_METHODS } from '@/data/FlowData'
-import { COSMOS_SIGNING_METHODS } from '@/data/COSMOSData'
-import { EIP155_SIGNING_METHODS } from '@/data/EIP155Data'
-import { SOLANA_SIGNING_METHODS } from '@/data/SolanaData'
 import ModalStore from '@/store/ModalStore'
 import { signClient } from '@/utils/WalletConnectUtil'
 import { SignClientTypes } from '@walletconnect/types'

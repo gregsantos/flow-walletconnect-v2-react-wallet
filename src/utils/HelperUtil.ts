@@ -40,21 +40,6 @@ export function getSignParamsMessage(params: string[]) {
 }
 
 /**
- * Gets data from various signTypedData request methods by filtering out
- * a value that is not an address (thus is data).
- * If data is a string convert it to object
- */
-export function getSignTypedDataParamsData(params: string[]) {
-  const data = params.filter(p => !utils.isAddress(p))[0]
-
-  if (typeof data === 'string') {
-    return JSON.parse(data)
-  }
-
-  return data
-}
-
-/**
  * Get our address from params checking if params string contains one
  * of our wallet addresses
  */
