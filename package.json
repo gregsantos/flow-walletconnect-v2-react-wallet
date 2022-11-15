@@ -13,7 +13,7 @@
     "@cosmjs/proto-signing": "0.28.4",
     "@json-rpc-tools/utils": "1.7.6",
     "@nextui-org/react": "1.0.8-beta.5",
-    "@onflow/fcl": "^1.1.1-alpha.2",
+    "@onflow/fcl": "1.3.2",
     "@onflow/util-encode-key": "^1.0.1",
     "@solana/web3.js": "1.43.0",
     "@walletconnect/sign-client": "^2.0.0-rc.3",
