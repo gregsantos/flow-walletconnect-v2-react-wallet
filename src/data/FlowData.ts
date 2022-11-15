@@ -33,6 +33,7 @@ export const FLOW_CHAINS = { ...FLOW_MAINNET_CHAINS, ...FLOW_TEST_CHAINS }
  */
 export const FLOW_SIGNING_METHODS = {
   FLOW_AUTHN: 'flow_authn',
+  FLOW_PRE_AUTHZ: 'flow_pre_authz',
   FLOW_AUTHZ: 'flow_authz',
   FLOW_USER_SIGN: 'flow_user_sign'
 }

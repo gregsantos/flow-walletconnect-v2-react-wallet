@@ -28,6 +28,17 @@ const getServices = (address: string) => [
   {
     f_type: 'Service',
     f_vsn: '1.0.0',
+    type: 'pre-authz',
+    uid: 'blocto#pre-authz',
+    method: 'HTTP/POST',
+    endpoint: 'https://flow-wallet-testnet.blocto.app/api/flow/pre-authz',
+    params: {
+      sessionId: 'eIvWaAN74-dJ2SrWuXr0'
+    }
+  },
+  {
+    f_type: 'Service',
+    f_vsn: '1.0.0',
     type: 'authz',
     uid: 'fcl-wc#authz',
     endpoint: 'flow_authz',
@@ -35,6 +46,9 @@ const getServices = (address: string) => [
     identity: {
       address: address,
       keyId: 0
+    },
+    params: {
+      sessionId: 'Zu1HvYJIQ-9NEC6Qo5r8'
     }
   },
   {
@@ -81,12 +95,78 @@ export async function approveFlowRequest(
         }
       })
 
+    case FLOW_SIGNING_METHODS.FLOW_PRE_AUTHZ:
+      return formatJsonRpcResult(id, {
+        f_type: 'PollingResponse',
+        f_vsn: '1.0.0',
+        status: 'APPROVED',
+        data: {
+          f_type: 'PreAuthzResponse',
+          f_vsn: '1.0.0',
+          proposer: {
+            // A single Authz Service
+            f_type: 'Service',
+            f_vsn: '1.0.0',
+            type: 'authz', // say it's an authorization service
+            uid: 'amazing-wallet#authz', // standard service uid
+            method: 'HTTP/POST', // can also be `IFRAME/RPC` or `POP/RPC`
+            endpoint: 'https://____', // where to talk to the service
+            identity: {
+              f_type: 'Identity',
+              f_vsn: '1.0.0',
+              address: '0xUser', // the address that the signature will be for
+              keyId: 0 // the key for the address that the signature will be for
+            },
+            data: {},
+            params: {}
+          },
+          payer: [
+            // An array of Authz Services
+            {
+              f_type: 'Service',
+              f_vsn: '1.0.0',
+              type: 'authz', // say it's an authorization service
+              uid: 'amazing-wallet#authz', // standard service uid
+              method: 'HTTP/POST', // can also be `IFRAME/RPC` or `POP/RPC`
+              endpoint: 'https://____', // where to talk to the service
+              identity: {
+                f_type: 'Identity',
+                f_vsn: '1.0.0',
+                address: '0xUser', // the address that the signature will be for
+                keyId: 0 // the key for the address that the signature will be for
+              },
+              data: {},
+              params: {}
+            }
+          ],
+          authorization: [
+            // An array of Authz Services (it's singular because it only represents a singular authorization)
+            {
+              f_type: 'Service',
+              f_vsn: '1.0.0',
+              type: 'authz', // say it's an authorization service
+              uid: 'amazing-wallet#authz', // standard service uid
+              method: 'HTTP/POST', // can also be `IFRAME/RPC` or `POP/RPC`
+              endpoint: 'https://____', // where to talk to the service
+              identity: {
+                f_type: 'Identity',
+                f_vsn: '1.0.0',
+                address: '0xUser', // the address that the signature will be for
+                keyId: 0 // the key for the address that the signature will be for
+              },
+              data: {},
+              params: {}
+            }
+          ]
+        }
+      })
+
     case FLOW_SIGNING_METHODS.FLOW_AUTHZ:
       const signature = sign(privKey, message)
       const compSig = new WalletUtils.CompositeSignature(addr, keyId, signature)
 
       return formatJsonRpcResult(id, {
-        f_type: 'PollingResponse',
+        f_type: 'PreAuthzResponse',
         f_vsn: '1.0.0',
         type: 'FCL:VIEW:RESPONSE',
         status: 'APPROVED',

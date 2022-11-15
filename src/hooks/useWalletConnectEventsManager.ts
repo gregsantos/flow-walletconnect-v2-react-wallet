@@ -40,7 +40,15 @@ export default function useWalletConnectEventsManager(initialized: boolean) {
             })
           }
           break
-
+        case FLOW_SIGNING_METHODS.FLOW_PRE_AUTHZ:
+          if (requestEvent) {
+            const response = await approveFlowRequest(requestEvent)
+            await signClient.respond({
+              topic: requestEvent.topic,
+              response
+            })
+          }
+          break
         case FLOW_SIGNING_METHODS.FLOW_AUTHZ:
         case FLOW_SIGNING_METHODS.FLOW_USER_SIGN:
           return ModalStore.open('SessionSignFlowModal', {
