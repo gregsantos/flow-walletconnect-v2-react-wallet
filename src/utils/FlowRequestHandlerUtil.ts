@@ -173,7 +173,7 @@ export async function approveFlowRequest(
       const compSig = new WalletUtils.CompositeSignature(addr, keyId, signature)
 
       return formatJsonRpcResult(id, {
-        f_type: 'PreAuthzResponse',
+        f_type: 'PollingResponse',
         f_vsn: '1.0.0',
         type: 'FCL:VIEW:RESPONSE',
         status: 'APPROVED',
